@@ -5,9 +5,6 @@
     <modules>
         <module>ewm_stats_service</module>
         <module>ewm_main_service</module>
-        <module>ewm_stats_service/client</module>
-        <module>ewm_stats_service/dto</module>
-        <module>ewm_stats_service/server</module>
     </modules>
 
     <parent>
@@ -24,17 +21,28 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
+<dependencyManagement>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
+            <version>3.0.4</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <version>3.0.4</version>
         </dependency>
+
+        <dependency>
+            <groupId>ru.practicum</groupId>
+            <artifactId>dto</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
     </dependencies>
+</dependencyManagement>
 
     <properties>
         <java.version>11</java.version>

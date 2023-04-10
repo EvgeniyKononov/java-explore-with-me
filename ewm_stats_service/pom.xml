@@ -8,8 +8,14 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
+    <modules>
+        <module>client</module>
+        <module>dto</module>
+        <module>server</module>
+    </modules>
 
     <artifactId>ewm_stats_service</artifactId>
+    <packaging>pom</packaging>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
