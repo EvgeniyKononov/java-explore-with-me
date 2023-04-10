@@ -3,7 +3,6 @@ package ru.practicum.ewm.service;
 import ru.practicum.ewm.dto.RequestStatsDto;
 import ru.practicum.ewm.dto.ResponseStatsDto;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface StatsService {

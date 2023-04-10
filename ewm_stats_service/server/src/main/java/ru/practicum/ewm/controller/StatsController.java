@@ -7,7 +7,6 @@ import ru.practicum.ewm.dto.RequestStatsDto;
 import ru.practicum.ewm.dto.ResponseStatsDto;
 import ru.practicum.ewm.service.StatsService;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController

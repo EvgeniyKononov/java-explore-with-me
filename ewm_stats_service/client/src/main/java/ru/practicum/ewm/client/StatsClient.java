@@ -35,7 +35,7 @@ public class StatsClient extends BaseClient {
     }
 
     public ResponseEntity<Object> getStats(String start, String end, String uris, String unique) {
-        if(Objects.nonNull(uris)) {
+        if (Objects.nonNull(uris)) {
             Map<String, Object> parameters = Map.of(
                     "start", start,
                     "end", end,

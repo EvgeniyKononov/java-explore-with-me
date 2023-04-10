@@ -26,7 +26,7 @@ public class StatsServiceImpl implements StatsService {
         Stats stats = StatsMapper.toEntity(requestStatsDto);
         return StatsMapper.toRequestDto(statsRepository.save(stats));
 
-      //  return "Информация сохранена";
+        //  return "Информация сохранена";
     }
 
     @Override
@@ -80,11 +80,11 @@ public class StatsServiceImpl implements StatsService {
     }
 
     private List<Stats> getUniqueStats(List<Stats> statsList) {
-        List <Stats> uniqueStats = new ArrayList<>();
+        List<Stats> uniqueStats = new ArrayList<>();
         List<String> ips = new ArrayList<>();
-        for (Stats stats: statsList) {
+        for (Stats stats : statsList) {
             String ip = stats.getIp();
-            if(!ips.contains(ip)) {
+            if (!ips.contains(ip)) {
                 uniqueStats.add(stats);
                 ips.add(ip);
             }
