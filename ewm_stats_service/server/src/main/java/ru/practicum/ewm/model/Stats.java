@@ -12,7 +12,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
-public class Stats extends BaseModel<Long> {
+@ToString
+public class Stats {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

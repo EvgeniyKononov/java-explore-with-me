@@ -12,5 +12,5 @@ public interface StatsRepository extends JpaRepository<Stats, Long> {
     List<Stats> findAllByTimestampIsBetween(LocalDateTime start, LocalDateTime end);
 
     @Query("select s from Stats s where s.uri in :uris and s.timestamp between :start and :end")
-    List<Stats> findAllByUriAndTimestampIsBetween(List<String> uris, LocalDateTime start, LocalDateTime end);
+    List<Stats> findAllByUrisAndTimestampIsBetween(List<String> uris, LocalDateTime start, LocalDateTime end);
 }
