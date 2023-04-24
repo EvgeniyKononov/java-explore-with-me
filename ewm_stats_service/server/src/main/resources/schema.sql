@@ -1,4 +1,4 @@
-drop table stats;
+--drop table stats;
 
 CREATE TABLE IF NOT EXISTS stats
 (
