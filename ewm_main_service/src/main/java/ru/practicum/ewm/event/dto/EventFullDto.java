@@ -27,10 +27,10 @@ public class EventFullDto extends EventShortDto {
     @Builder(builderMethodName = "childBuilder")
     public EventFullDto(@NotNull String annotation, @NotNull CategoryDto category, Integer confirmedRequests,
                         @NotNull String eventDate, Long id, @NotNull UserShortDto initiator, @NotNull Boolean paid,
-                        @NotNull String title, Integer views, String createdOn, String description,
-                        LocationDto location, Integer participantLimit, String publishedOn, Boolean requestModeration,
-                        State state) {
-        super(annotation, category, confirmedRequests, eventDate, id, initiator, paid, title, views);
+                        @NotNull String title, Integer views, Integer likes, Integer dislikes, String createdOn,
+                        String description, LocationDto location, Integer participantLimit, String publishedOn,
+                        Boolean requestModeration, State state) {
+        super(annotation, category, confirmedRequests, eventDate, id, initiator, paid, title, views, likes, dislikes);
         this.createdOn = createdOn;
         this.description = description;
         this.location = location;

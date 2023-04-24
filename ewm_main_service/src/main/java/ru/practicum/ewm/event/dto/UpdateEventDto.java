@@ -6,11 +6,10 @@ import ru.practicum.ewm.location.dto.LocationDto;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 @ToString
 public class UpdateEventDto extends NewEventDto {
-    private StateAction stateAction;
+    private final StateAction stateAction;
 
     @Builder(builderMethodName = "childBuilder")
     public UpdateEventDto(@Length(min = 20, max = 2000) String annotation, Long category,
@@ -35,4 +34,5 @@ public class UpdateEventDto extends NewEventDto {
     public Boolean getRequestModeration() {
         return super.requestModeration;
     }
+
 }

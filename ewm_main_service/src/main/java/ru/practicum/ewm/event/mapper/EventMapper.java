@@ -8,6 +8,7 @@ import ru.practicum.ewm.event.model.State;
 import ru.practicum.ewm.exception.ConflictException;
 import ru.practicum.ewm.location.mapper.LocationMapper;
 import ru.practicum.ewm.location.model.Location;
+import ru.practicum.ewm.raiting.dto.RatingDto;
 import ru.practicum.ewm.request.model.Request;
 import ru.practicum.ewm.request.model.RequestStatus;
 import ru.practicum.ewm.user.mapper.UserMapper;
@@ -44,7 +45,7 @@ public class EventMapper {
                 .build();
     }
 
-    public static EventFullDto toFullDto(Event event, Integer views) {
+    public static EventFullDto toFullDto(Event event, Integer views, RatingDto rating) {
         return EventFullDto.childBuilder()
                 .annotation(event.getAnnotation())
                 .category(CategoryMapper.toDto(event.getCategory()))
@@ -62,10 +63,12 @@ public class EventMapper {
                 .state(event.getState())
                 .title(event.getTitle())
                 .views(views)
+                .likes(rating.getLikes())
+                .dislikes(rating.getDislikes())
                 .build();
     }
 
-    public static EventShortDto toShortDto(Event event, Integer views) {
+    public static EventShortDto toShortDto(Event event, Integer views, RatingDto rating) {
         return EventShortDto.builder()
                 .annotation(event.getAnnotation())
                 .category(CategoryMapper.toDto(event.getCategory()))
@@ -76,6 +79,8 @@ public class EventMapper {
                 .paid(event.getPaid())
                 .title(event.getTitle())
                 .views(views)
+                .likes(rating.getLikes())
+                .dislikes(rating.getDislikes())
                 .build();
     }
 
@@ -110,18 +115,20 @@ public class EventMapper {
                 .build();
     }
 
-    public static List<EventShortDto> toShortDtos(List<Event> events, Map<Long, Integer> views) {
+    public static List<EventShortDto> toShortDtos(List<Event> events, Map<Long, Integer> views,
+                                                  Map<Long, RatingDto> ratings) {
         List<EventShortDto> shortsDtos = new ArrayList<>();
         for (Event event : events) {
-            shortsDtos.add(toShortDto(event, views.get(event.getId())));
+            shortsDtos.add(toShortDto(event, views.get(event.getId()), ratings.get(event.getId())));
         }
         return shortsDtos;
     }
 
-    public static List<EventFullDto> toFullDtos(List<Event> events, Map<Long, Integer> views) {
+    public static List<EventFullDto> toFullDtos(List<Event> events, Map<Long, Integer> views,
+                                                Map<Long, RatingDto> ratings) {
         List<EventFullDto> fullDtos = new ArrayList<>();
         for (Event event : events) {
-            fullDtos.add(toFullDto(event, views.get(event.getId())));
+            fullDtos.add(toFullDto(event, views.get(event.getId()), ratings.get(event.getId())));
         }
         return fullDtos;
     }

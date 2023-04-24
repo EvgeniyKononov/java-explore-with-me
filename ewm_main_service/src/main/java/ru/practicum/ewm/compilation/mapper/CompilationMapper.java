@@ -5,6 +5,7 @@ import ru.practicum.ewm.compilation.dto.NewCompilationDto;
 import ru.practicum.ewm.compilation.model.Compilation;
 import ru.practicum.ewm.event.mapper.EventMapper;
 import ru.practicum.ewm.event.model.Event;
+import ru.practicum.ewm.raiting.dto.RatingDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +21,11 @@ public class CompilationMapper {
                 .build();
     }
 
-    public static CompilationDto toDto(Compilation compilation, Map<Long, Integer> views) {
+    public static CompilationDto toDto(Compilation compilation, Map<Long, Integer> views,
+                                       Map<Long, RatingDto> ratings) {
         return CompilationDto.builder()
                 .id(compilation.getId())
-                .events(EventMapper.toShortDtos(compilation.getEvents(), views))
+                .events(EventMapper.toShortDtos(compilation.getEvents(), views, ratings))
                 .pinned(compilation.getPinned())
                 .title(compilation.getTitle())
                 .build();
@@ -40,10 +42,11 @@ public class CompilationMapper {
                 .build();
     }
 
-    public static List<CompilationDto> toDtos(List<Compilation> compilations, Map<Long, Integer> views) {
+    public static List<CompilationDto> toDtos(List<Compilation> compilations, Map<Long, Integer> views,
+                                              Map<Long, RatingDto> ratings) {
         List<CompilationDto> dtos = new ArrayList<>();
         for (Compilation compilation : compilations) {
-            dtos.add(toDto(compilation, views));
+            dtos.add(toDto(compilation, views, ratings));
         }
         return dtos;
     }

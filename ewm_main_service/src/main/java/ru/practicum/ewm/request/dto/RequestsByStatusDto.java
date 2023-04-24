@@ -11,6 +11,6 @@ import java.util.List;
 @Builder
 @ToString
 public class RequestsByStatusDto {
-    List<RequestDto> confirmedRequests;
-    List<RequestDto> rejectedRequests;
+    private List<RequestDto> confirmedRequests;
+    private List<RequestDto> rejectedRequests;
 }

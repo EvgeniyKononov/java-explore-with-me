@@ -19,6 +19,10 @@ import ru.practicum.ewm.exception.ConflictException;
 import ru.practicum.ewm.exception.NotFoundException;
 import ru.practicum.ewm.location.model.Location;
 import ru.practicum.ewm.location.service.LocationService;
+import ru.practicum.ewm.raiting.dto.RatingDto;
+import ru.practicum.ewm.raiting.model.Rate;
+import ru.practicum.ewm.raiting.model.SortType;
+import ru.practicum.ewm.raiting.service.RatingService;
 import ru.practicum.ewm.request.dto.RequestDto;
 import ru.practicum.ewm.request.dto.RequestStatusUpdateDto;
 import ru.practicum.ewm.request.dto.RequestsByStatusDto;
@@ -50,17 +54,19 @@ public class EventServiceImpl implements EventService {
     private final LocationService locationService;
     private final RequestService requestService;
     private final StatsClient statsClient;
+    private final RatingService ratingService;
 
     @Autowired
     public EventServiceImpl(EventRepository eventRepository, CategoryService categoryService,
                             UserService userService, LocationService locationService, RequestService requestService,
-                            StatsClient statsClient) {
+                            StatsClient statsClient, RatingService ratingService) {
         this.eventRepository = eventRepository;
         this.categoryService = categoryService;
         this.userService = userService;
         this.locationService = locationService;
         this.requestService = requestService;
         this.statsClient = statsClient;
+        this.ratingService = ratingService;
     }
 
     @Override
@@ -77,17 +83,19 @@ public class EventServiceImpl implements EventService {
         Event event = EventMapper.toNewEntity(newEventDto, category, initiator, location);
         checkTime(event);
         event = eventRepository.save(event);
-        Integer views = getStats(event.getId());
+        Integer views = 0;
+        RatingDto rating = RatingDto.builder().eventId(event.getId()).likes(0).dislikes(0).build();
         log.info("Created event {}", event);
-        return EventMapper.toFullDto(event, views);
+        return EventMapper.toFullDto(event, views, rating);
     }
 
     @Override
     public List<EventShortDto> getEventsByUserId(Long userId, PageRequest page) {
         List<Event> events = eventRepository.findAllByInitiatorId(userId, page);
         Map<Long, Integer> views = getStats(events);
+        Map<Long, RatingDto> ratings = ratingService.getRatingsByEvents(events);
         log.info("Getting events {}", events);
-        return EventMapper.toShortDtos(events, views);
+        return EventMapper.toShortDtos(events, views, ratings);
     }
 
     @Override
@@ -95,8 +103,9 @@ public class EventServiceImpl implements EventService {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_EVENT_MSG, NOT_FOUND_ID_REASON));
         Integer views = getStats(event.getId());
+        RatingDto rating = ratingService.getRatingByEvent(event);
         log.info("Getting event {}", event);
-        return EventMapper.toFullDto(event, views);
+        return EventMapper.toFullDto(event, views, rating);
     }
 
     @Override
@@ -112,8 +121,9 @@ public class EventServiceImpl implements EventService {
         checkTime(event);
         event = eventRepository.save(event);
         Integer views = getStats(event.getId());
+        RatingDto rating = ratingService.getRatingByEvent(event);
         log.info("Updated event {}", event);
-        return EventMapper.toFullDto(event, views);
+        return EventMapper.toFullDto(event, views, rating);
     }
 
     @Override
@@ -136,8 +146,9 @@ public class EventServiceImpl implements EventService {
         LocalDateTime end = Objects.isNull(rangeEnd) ? null : LocalDateTime.parse(rangeEnd, FORMAT);
         List<Event> events = getEventsByFilters(null, null, users, statesStr, categories, start, end, page);
         Map<Long, Integer> views = getStats(events);
+        Map<Long, RatingDto> ratings = ratingService.getRatingsByEvents(events);
         log.info("Getting events {}", events);
-        return EventMapper.toFullDtos(events, views);
+        return EventMapper.toFullDtos(events, views, ratings);
     }
 
     @Override
@@ -151,8 +162,9 @@ public class EventServiceImpl implements EventService {
                 start, end, page);
         Map<Long, Integer> views = getStats(events);
         saveStats(request);
+        Map<Long, RatingDto> ratings = ratingService.getRatingsByEvents(events);
         log.info("Getting events {}", events);
-        List<EventShortDto> shortDtos = EventMapper.toShortDtos(events, views);
+        List<EventShortDto> shortDtos = EventMapper.toShortDtos(events, views, ratings);
         return sortDto(sort, shortDtos);
     }
 
@@ -162,8 +174,43 @@ public class EventServiceImpl implements EventService {
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_EVENT_MSG, NOT_FOUND_ID_REASON));
         Integer views = getStats(event.getId());
         saveStats(request);
+        RatingDto rating = ratingService.getRatingByEvent(event);
         log.info("Getting event {}", event);
-        return EventMapper.toFullDto(event, views);
+        return EventMapper.toFullDto(event, views, rating);
+    }
+
+    @Override
+    public EventShortDto addRateToEvent(Long userId, Long eventId, Rate rate) {
+        Event event = eventRepository.findByIdAndState(eventId, State.PUBLISHED)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_EVENT_MSG, NOT_FOUND_ID_REASON));
+        User rater = userService.findById(userId)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER_MSG, NOT_FOUND_ID_REASON));
+        RatingDto rating = ratingService.addRate(rater, event, rate);
+        Integer views = getStats(event.getId());
+        return EventMapper.toShortDto(event, views, rating);
+    }
+
+    @Override
+    public EventShortDto deleteRateFromEvent(Long userId, Long eventId) {
+        Event event = eventRepository.findByIdAndState(eventId, State.PUBLISHED)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_EVENT_MSG, NOT_FOUND_ID_REASON));
+        User rater = userService.findById(userId)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER_MSG, NOT_FOUND_ID_REASON));
+        RatingDto rating = ratingService.deleteRate(rater, event);
+        Integer views = getStats(event.getId());
+        return EventMapper.toShortDto(event, views, rating);
+    }
+
+    @Override
+    public List<EventShortDto> getEventsByRating(Rate rate, SortType sort, PageRequest page,
+                                                 HttpServletRequest request) {
+        // List <RatingDto> ratings = ratingService.getRatingsSortedByRate(rate, sort, page);
+        return null;
+    }
+
+    @Override
+    public List<Event> findByIds(List<Long> eventsId) {
+        return eventRepository.findAllById(eventsId);
     }
 
     @Override

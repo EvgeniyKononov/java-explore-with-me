@@ -11,6 +11,7 @@ import ru.practicum.ewm.event.dto.EventShortDto;
 import ru.practicum.ewm.event.dto.NewEventDto;
 import ru.practicum.ewm.event.dto.UpdateEventDto;
 import ru.practicum.ewm.event.service.EventService;
+import ru.practicum.ewm.raiting.model.Rate;
 import ru.practicum.ewm.request.dto.RequestDto;
 import ru.practicum.ewm.request.dto.RequestStatusUpdateDto;
 import ru.practicum.ewm.request.dto.RequestsByStatusDto;
@@ -73,4 +74,18 @@ public class EventPrivateController {
         return eventService.updateEventRequestsStatus(eventId, userId, requestStatusUpdateDto);
     }
 
+    @PostMapping(value = "/{eventId}/rating")
+    @ResponseStatus(HttpStatus.CREATED)
+    public EventShortDto addRateToEvent(@PathVariable Long userId, @PathVariable Long eventId,
+                                        @RequestParam Rate rate) {
+        log.info("Adding rate={} event={} from user={}", rate, eventId, userId);
+        return eventService.addRateToEvent(userId, eventId, rate);
+    }
+
+    @DeleteMapping(value = "/{eventId}/rating")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public EventShortDto deleteRateFromEvent(@PathVariable Long userId, @PathVariable Long eventId) {
+        log.info("Deleting rate from event={} from user={}", eventId, userId);
+        return eventService.deleteRateFromEvent(userId, eventId);
+    }
 }

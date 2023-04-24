@@ -53,9 +53,9 @@ CREATE TABLE IF NOT EXISTS locations
 
 CREATE TABLE IF NOT EXISTS ratings
 (
-    event_id BIGINT NOT NULL,
-    user_id  BIGINT NOT NULL,
-    rate     BIGINT NOT NULL,
+    event_id BIGINT      NOT NULL,
+    user_id  BIGINT      NOT NULL,
+    rate     VARCHAR(16) NOT NULL,
     CONSTRAINT ratings_users_null_fk FOREIGN KEY (user_id) REFERENCES users (id),
     CONSTRAINT ratings_events_null_fk FOREIGN KEY (event_id) REFERENCES events (id)
 );

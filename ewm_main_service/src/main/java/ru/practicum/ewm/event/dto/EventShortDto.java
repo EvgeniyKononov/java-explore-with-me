@@ -28,4 +28,6 @@ public class EventShortDto {
     @NotNull
     private String title;
     private Integer views;
+    private Integer likes;
+    private Integer dislikes;
 }
