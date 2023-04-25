@@ -10,8 +10,8 @@
     <modelVersion>4.0.0</modelVersion>
     <modules>
         <module>client</module>
-        <module>dto</module>
         <module>server</module>
+        <module>dto</module>
     </modules>
 
     <artifactId>ewm_stats_service</artifactId>

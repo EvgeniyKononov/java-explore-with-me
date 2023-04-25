@@ -25,8 +25,6 @@ public class StatsServiceImpl implements StatsService {
     public RequestStatsDto createStats(RequestStatsDto requestStatsDto) {
         Stats stats = StatsMapper.toEntity(requestStatsDto);
         return StatsMapper.toRequestDto(statsRepository.save(stats));
-
-        //  return "Информация сохранена";
     }
 
     @Override
@@ -69,13 +67,23 @@ public class StatsServiceImpl implements StatsService {
     }
 
     private List<ResponseStatsDto> getUniqueStatsByUri(LocalDateTime start, LocalDateTime end, List<String> uris) {
-        List<Stats> statsList = statsRepository.findAllByUriAndTimestampIsBetween(uris, start, end);
+        List<Stats> statsList;
+      //  if(uris.size() == 1){
+      //      statsList = statsRepository.findAllByUriIsContainingAndTimestampIsBetween(uris.get(0), start, end);
+       // } else {
+            statsList = statsRepository.findAllByUrisAndTimestampIsBetween(uris, start, end);
+      //  }
         statsList = getUniqueStats(statsList);
         return getResponseStatsDtos(statsList);
     }
 
     private List<ResponseStatsDto> getAllStatsByUri(LocalDateTime start, LocalDateTime end, List<String> uris) {
-        List<Stats> statsList = statsRepository.findAllByUriAndTimestampIsBetween(uris, start, end);
+        List<Stats> statsList;
+  //      if(uris.size() == 1){
+   //         statsList = statsRepository.findAllByUriIsContainingAndTimestampIsBetween(uris.get(0), start, end);
+    //    } else {
+            statsList = statsRepository.findAllByUrisAndTimestampIsBetween(uris, start, end);
+  //      }
         return getResponseStatsDtos(statsList);
     }
 
