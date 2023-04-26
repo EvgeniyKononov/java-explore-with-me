@@ -32,6 +32,8 @@ public class Constant {
     public static final String INCORRECT_CATEGORY_REL_REASON = "Category related to events";
     public static final String INCORRECT_SORT_TYPE_MSG = "Impossible to sort with such parameter";
     public static final String INCORRECT_SORT_TYPE_REASON = "Sort type must be: EVENT_DATE, VIEWS, LIKES or DISLIKES";
+    public static final String INCORRECT_RATE_ADDING_MSG = "Impossible to rate the event";
+    public static final String INCORRECT_RATER_REASON = "Initiator can't to rate himself";
     public static final String NOT_FOUND_ID_REASON = "Incorrect Id";
     public static final String NOT_FOUND_EVENT_MSG = "Event not found";
     public static final String NOT_FOUND_USER_MSG = "User not found";

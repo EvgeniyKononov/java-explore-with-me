@@ -63,8 +63,8 @@ public class EventMapper {
                 .state(event.getState())
                 .title(event.getTitle())
                 .views(views)
-                .likes(rating.getLikes())
-                .dislikes(rating.getDislikes())
+                .likes(Objects.isNull(rating.getLikes()) ? 0 : rating.getLikes())
+                .dislikes(Objects.isNull(rating.getDislikes()) ? 0 : rating.getLikes())
                 .build();
     }
 
@@ -79,8 +79,8 @@ public class EventMapper {
                 .paid(event.getPaid())
                 .title(event.getTitle())
                 .views(views)
-                .likes(rating.getLikes())
-                .dislikes(rating.getDislikes())
+                .likes(Objects.isNull(rating.getLikes()) ? 0 : rating.getLikes())
+                .dislikes(Objects.isNull(rating.getDislikes()) ? 0 : rating.getLikes())
                 .build();
     }
 
