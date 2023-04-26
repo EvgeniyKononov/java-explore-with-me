@@ -12,5 +12,7 @@ import java.util.List;
 @Repository
 public interface RatingRepository extends JpaRepository<Rating, RatingPK> {
     List<Rating> findAllByEventAndRate(Event event, Rate like);
-    //List<Rating> findAllByRate - для 3-его этапа. Прошу не смотреть
+
+    List<Rating> findAllByEventIn(List<Event> events);
+
 }

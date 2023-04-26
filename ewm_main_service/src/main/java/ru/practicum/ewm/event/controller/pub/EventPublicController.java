@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.event.dto.EventFullDto;
 import ru.practicum.ewm.event.dto.EventShortDto;
 import ru.practicum.ewm.event.service.EventService;
-import ru.practicum.ewm.raiting.model.Rate;
-import ru.practicum.ewm.raiting.model.SortType;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -47,15 +45,5 @@ public class EventPublicController {
                 rangeEnd, onlyAvailable, sort, from, size);
         return eventService.getEventsByPublicFilters(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort,
                 PageRequest.of(from, size), request);
-    }
-
-    @GetMapping(value = "/ratings")
-    public List<EventShortDto> getEventsByRating(@RequestParam(required = false, defaultValue = "LIKE") Rate rate,
-                                                 @RequestParam(required = false, defaultValue = "DESC") SortType sort,
-                                                 @RequestParam(required = false, defaultValue = "0") int from,
-                                                 @RequestParam(required = false, defaultValue = "10") int size,
-                                                 HttpServletRequest request) {
-        log.info("Getting events by rating rate={}, sort={}, from={}, size={}", rate, sort, from, size);
-        return eventService.getEventsByRating(rate, sort, PageRequest.of(from, size), request);
     }
 }

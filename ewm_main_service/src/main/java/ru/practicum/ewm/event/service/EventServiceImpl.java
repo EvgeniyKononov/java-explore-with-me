@@ -21,7 +21,6 @@ import ru.practicum.ewm.location.model.Location;
 import ru.practicum.ewm.location.service.LocationService;
 import ru.practicum.ewm.raiting.dto.RatingDto;
 import ru.practicum.ewm.raiting.model.Rate;
-import ru.practicum.ewm.raiting.model.SortType;
 import ru.practicum.ewm.raiting.service.RatingService;
 import ru.practicum.ewm.request.dto.RequestDto;
 import ru.practicum.ewm.request.dto.RequestStatusUpdateDto;
@@ -201,12 +200,6 @@ public class EventServiceImpl implements EventService {
         return EventMapper.toShortDto(event, views, rating);
     }
 
-    @Override
-    public List<EventShortDto> getEventsByRating(Rate rate, SortType sort, PageRequest page,
-                                                 HttpServletRequest request) {
-        // List <RatingDto> ratings = ratingService.getRatingsSortedByRate(rate, sort, page);
-        return null;
-    }
 
     @Override
     public List<Event> findByIds(List<Long> eventsId) {
@@ -271,8 +264,17 @@ public class EventServiceImpl implements EventService {
             return shortDtos.stream()
                     .sorted(Comparator.comparingInt(EventShortDto::getViews))
                     .collect(Collectors.toList());
+        } else if (Objects.equals(sort, "LIKES")) {
+            return shortDtos.stream()
+                    .sorted(Comparator.comparingInt(EventShortDto::getLikes))
+                    .collect(Collectors.toList());
+        } else if (Objects.equals(sort, "DISLIKES")) {
+            return shortDtos.stream()
+                    .sorted(Comparator.comparingInt(EventShortDto::getDislikes))
+                    .collect(Collectors.toList());
+        } else {
+            throw new ConflictException(INCORRECT_SORT_TYPE_MSG, INCORRECT_SORT_TYPE_REASON);
         }
-        return new ArrayList<>();
     }
 
     private List<Event> getEventsByFilters(String text, Boolean paid, List<Long> users, List<String> statesStr,

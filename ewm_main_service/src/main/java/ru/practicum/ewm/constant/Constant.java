@@ -30,6 +30,8 @@ public class Constant {
     public static final String INCORRECT_DATA_INPUT_MSG = "Incorrect data input";
     public static final String INCORRECT_NAME_UNIQUE_REASON = "Field name must be unique";
     public static final String INCORRECT_CATEGORY_REL_REASON = "Category related to events";
+    public static final String INCORRECT_SORT_TYPE_MSG = "Impossible to sort with such parameter";
+    public static final String INCORRECT_SORT_TYPE_REASON = "Sort type must be: EVENT_DATE, VIEWS, LIKES or DISLIKES";
     public static final String NOT_FOUND_ID_REASON = "Incorrect Id";
     public static final String NOT_FOUND_EVENT_MSG = "Event not found";
     public static final String NOT_FOUND_USER_MSG = "User not found";
