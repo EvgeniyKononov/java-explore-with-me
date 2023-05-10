@@ -4,7 +4,6 @@ import org.springframework.data.domain.PageRequest;
 import ru.practicum.ewm.event.dto.*;
 import ru.practicum.ewm.event.model.Event;
 import ru.practicum.ewm.raiting.model.Rate;
-import ru.practicum.ewm.raiting.model.SortType;
 import ru.practicum.ewm.request.dto.RequestDto;
 import ru.practicum.ewm.request.dto.RequestStatusUpdateDto;
 import ru.practicum.ewm.request.dto.RequestsByStatusDto;
@@ -43,8 +42,6 @@ public interface EventService {
     EventShortDto addRateToEvent(Long userId, Long eventId, Rate rate);
 
     EventShortDto deleteRateFromEvent(Long userId, Long eventId);
-
-    List<EventShortDto> getEventsByRating(Rate rate, SortType sort, PageRequest page, HttpServletRequest request);
 
     List<Event> findByIds(List<Long> eventsId);
 }

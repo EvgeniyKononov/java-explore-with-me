@@ -21,7 +21,6 @@ import ru.practicum.ewm.location.model.Location;
 import ru.practicum.ewm.location.service.LocationService;
 import ru.practicum.ewm.raiting.dto.RatingDto;
 import ru.practicum.ewm.raiting.model.Rate;
-import ru.practicum.ewm.raiting.model.SortType;
 import ru.practicum.ewm.raiting.service.RatingService;
 import ru.practicum.ewm.request.dto.RequestDto;
 import ru.practicum.ewm.request.dto.RequestStatusUpdateDto;
@@ -41,6 +40,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.util.Comparator.comparingInt;
 import static ru.practicum.ewm.constant.Constant.*;
 
 @Service
@@ -185,6 +185,9 @@ public class EventServiceImpl implements EventService {
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_EVENT_MSG, NOT_FOUND_ID_REASON));
         User rater = userService.findById(userId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER_MSG, NOT_FOUND_ID_REASON));
+        if (Objects.equals(event.getInitiator(), rater)) {
+            throw new ConflictException(INCORRECT_RATE_ADDING_MSG, INCORRECT_RATER_REASON);
+        }
         RatingDto rating = ratingService.addRate(rater, event, rate);
         Integer views = getStats(event.getId());
         return EventMapper.toShortDto(event, views, rating);
@@ -201,12 +204,6 @@ public class EventServiceImpl implements EventService {
         return EventMapper.toShortDto(event, views, rating);
     }
 
-    @Override
-    public List<EventShortDto> getEventsByRating(Rate rate, SortType sort, PageRequest page,
-                                                 HttpServletRequest request) {
-        // List <RatingDto> ratings = ratingService.getRatingsSortedByRate(rate, sort, page);
-        return null;
-    }
 
     @Override
     public List<Event> findByIds(List<Long> eventsId) {
@@ -269,10 +266,19 @@ public class EventServiceImpl implements EventService {
                     .collect(Collectors.toList());
         } else if (Objects.equals(sort, "VIEWS")) {
             return shortDtos.stream()
-                    .sorted(Comparator.comparingInt(EventShortDto::getViews))
+                    .sorted(comparingInt(EventShortDto::getViews))
                     .collect(Collectors.toList());
+        } else if (Objects.equals(sort, "LIKES")) {
+            return shortDtos.stream()
+                    .sorted(Comparator.comparingLong(EventShortDto::getLikes).reversed())
+                    .collect(Collectors.toList());
+        } else if (Objects.equals(sort, "DISLIKES")) {
+            return shortDtos.stream()
+                    .sorted(comparingInt(EventShortDto::getDislikes).reversed())
+                    .collect(Collectors.toList());
+        } else {
+            throw new ConflictException(INCORRECT_SORT_TYPE_MSG, INCORRECT_SORT_TYPE_REASON);
         }
-        return new ArrayList<>();
     }
 
     private List<Event> getEventsByFilters(String text, Boolean paid, List<Long> users, List<String> statesStr,

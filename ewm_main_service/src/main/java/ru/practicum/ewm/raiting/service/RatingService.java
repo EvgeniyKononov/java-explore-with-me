@@ -2,9 +2,9 @@ package ru.practicum.ewm.raiting.service;
 
 import org.springframework.data.domain.PageRequest;
 import ru.practicum.ewm.event.model.Event;
+import ru.practicum.ewm.raiting.dto.InitiatorRatingDto;
 import ru.practicum.ewm.raiting.dto.RatingDto;
 import ru.practicum.ewm.raiting.model.Rate;
-import ru.practicum.ewm.raiting.model.SortType;
 import ru.practicum.ewm.user.model.User;
 
 import java.util.List;
@@ -19,5 +19,7 @@ public interface RatingService {
 
     RatingDto deleteRate(User rater, Event event);
 
-    List<RatingDto> getRatingsSortedByRate(Rate rate, SortType sort, PageRequest page);
+    List<RatingDto> getRatingsForEvents(Rate rate, PageRequest page);
+
+    List<InitiatorRatingDto> getRatingsForInitiators(Rate rate, PageRequest of);
 }

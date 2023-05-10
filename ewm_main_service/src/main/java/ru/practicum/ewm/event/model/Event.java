@@ -18,7 +18,6 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @ToString
-@EqualsAndHashCode
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,4 +49,26 @@ public class Event {
     @Enumerated(EnumType.STRING)
     private State state;
     private String title;
+
+
+    public boolean equals(Object o) {
+        if (o == null) {
+            return false;
+        } else if (this == o) {
+            return true;
+        } else if (!(o instanceof Event)) {
+            return false;
+        } else {
+            Event that = (Event) o;
+            if (!that.getClass().equals(this.getClass())) {
+                return false;
+            } else {
+                return this.id != null && this.id.equals(that.id);
+            }
+        }
+    }
+
+    public int hashCode() {
+        return this.id != null ? this.id.hashCode() : 0;
+    }
 }
